@@ -35,7 +35,7 @@ list_t *list_create(void) {
 	return list;
 }
 
-//Progressivly destroy each element in the list, then the list itself at the end
+//Progressivly free each element in the list, then the list itself at the end
 void list_destroy(list_t *list){
 	node_t *current = list->head;
 	while(current != NULL){
