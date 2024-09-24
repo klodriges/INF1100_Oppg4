@@ -1,6 +1,7 @@
 #include "list.h"
 #include <stdlib.h>
 
+//A structure for the nodes in the list
 typedef struct node {
     void *item;
     struct node *next;
@@ -8,47 +9,82 @@ typedef struct node {
 
 struct list {
 	node_t *head;
+};
+
+//A funciton to create a new node
+node_t *create_node(void *item, node_t *next) {
+    node_t *new_node = malloc(sizeof(node_t));
+    if (new_node == NULL) {
+        //Memory allocation failure
+        return NULL;
+    }
+    new_node->item = item;
+    new_node->next = next;
+    return new_node;
 }
 
+//Allocate space in the memory for the address of the head of a new list
 list_t *list_create(void) {
-	list_t newList;
+	list_t *list = malloc(sizeof(list_t));
+ 	if (list == NULL) {
+        //Allocation failure
+        return NULL;
+    }
 
-	// this is missing a bit that hold the item
-	newList->next = NULL;
+	list->head = NULL;	
+	return list;
 }
 
-void list_addfirst(list_t *list, void *item){
-	
+//Progressivly destroy each element in the list, then the list itself at the end
+void list_destroy(list_t *list){
+	node_t *current = list->head;
+	while(current != NULL){
+		node_t *next = current->next;
+		free(current);
+		current = next;
+	}
+	free(list);
+}
+
+//Sets up a new node then puts it at the head of the list, moving the original head element to its next
+void list_addfirst(list_t *list, void *item){    
+    node_t *new_node = create_node(item, list->head);
+
+    list->head = new_node;
 }
 
 //Walks through the list untill we find the node pointing to void and add our new item
-void list_addlast(list_t *list, void *item){
-	while(list->next != NULL){
-		list = list->next;		
-	}
-	
-	node_t *newNode = malloc(sizeof(list_t));
-	
-	newNode->next = NULL;
-	newNode->item = item;
+void list_addlast(list_t *list, void *item) {
+    node_t *new_node = create_node(item, NULL);
 
-	list->next = newNode;	
+    if (list->head == NULL) {
+        // If the list is empty, set the head to the new node
+        list->head = new_node;
+    } else {
+        // Traverse to the last node
+        node_t *current = list->head;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = new_node;
+    }
 }
 
-//assuming item is unique
 //Walking through the list untill we find the item that is to be removed, then changing the pointers in the list to point "past" that item
 void list_remove(list_t *list, void *item){
-	list_t *previous = NULL;
-	list_t *current = *list;
+	node_t *previous = NULL;
+	node_t *current = list->head;
 
 	while(current != NULL){
 		if(current->item == item){
-			if(previous != NULL){		//If there are no items before the one we want to remove, change the start of the list
+			if(previous == NULL){
+				//If there are no items before the one we want to remove, change the start of the list
 				list->head = current->next;
-			} else {					//Else change the pointer of previous to the pointer of the object we wish to remove
+			} else {		
+				//Else change the pointer of previous to the pointer of the object we wish to remove
 				previous->next = current->next;
 			}
-			//free(current); Not sure if we need this because of the "only freeing the node." line						
+			free(current);
 		} else {
 			previous = current;
 			current = current->next;
@@ -59,9 +95,10 @@ void list_remove(list_t *list, void *item){
 // Walk thorugh the list, starting at one to count the first item. If the node has a next node, add one to the count and walk.
 int list_size(list_t *list){
 	int count = 0;
-	while(list != NULL){
+	node_t *current = list->head;
+	while(current != NULL){
 		count++;
-		list = list->next;
+		current = current->next;
 	}
 	return count;
 }
