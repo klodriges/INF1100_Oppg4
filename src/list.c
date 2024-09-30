@@ -13,7 +13,7 @@ struct list {
 
 //A funciton to create a new node
 node_t *create_node(void *item, node_t *next) {
-    node_t *new_node = gc_malloc(sizeof(node_t));
+    node_t *new_node = malloc(sizeof(node_t));
     if (new_node == NULL) {
         //Memory allocation failure
         return NULL;
@@ -25,7 +25,7 @@ node_t *create_node(void *item, node_t *next) {
 
 //Allocate space in the memory for the address of the head of a new list
 list_t *list_create(void) {
-	list_t *list = gc_malloc(sizeof(list_t));
+	list_t *list = malloc(sizeof(list_t));
  	if (list == NULL) {
         //Allocation failure
         return NULL;
@@ -40,17 +40,16 @@ void list_destroy(list_t *list){
 	node_t *current = list->head;
 	while(current != NULL){
 		node_t *next = current->next;
-		gc_free(current);
+		free(current);
 		current = next;
 	}
-	gc_free(list);
+	free(list);
 }
 
 //Sets up a new node then puts it at the head of the list, moving the original head element to its next
 void list_addfirst(list_t *list, void *item){    
     node_t *new_node = create_node(item, list->head);
 
-    gc_register(item);
     list->head = new_node;
 }
 
@@ -69,7 +68,6 @@ void list_addlast(list_t *list, void *item) {
         }
         current->next = new_node;
     }
-    gc_register(item);
 }
 
 //Walking through the list untill we find the item that is to be removed, then changing the pointers in the list to point "past" that item
@@ -86,7 +84,7 @@ void list_remove(list_t *list, void *item){
 				//Else change the pointer of previous to the pointer of the object we wish to remove
 				previous->next = current->next;
 			}
-			gc_free(current);
+			free(current);
 			return;
 		} else {
 			previous = current;
@@ -114,7 +112,7 @@ struct list_iterator {
 };
 
 list_iterator_t *list_createiterator(list_t *list) {
-    list_iterator_t *iter = gc_malloc(sizeof(list_iterator_t));
+    list_iterator_t *iter = malloc(sizeof(list_iterator_t));
     if (iter == NULL) {
         //Handle memory allocation failure
         return NULL;
@@ -125,7 +123,7 @@ list_iterator_t *list_createiterator(list_t *list) {
 }
 
 void list_destroyiterator(list_iterator_t *iter) {
-    gc_free(iter);
+    free(iter);
 }
 
 void *list_next(list_iterator_t *iter) {
