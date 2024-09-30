@@ -87,6 +87,7 @@ void list_remove(list_t *list, void *item){
 				previous->next = current->next;
 			}
 			gc_free(current);
+			return;
 		} else {
 			previous = current;
 			current = current->next;
@@ -104,7 +105,6 @@ int list_size(list_t *list){
 	}
 	return count;
 }
-
 
 //--- Iterator ---
 
