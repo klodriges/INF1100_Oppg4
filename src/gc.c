@@ -38,9 +38,6 @@ void gc_register(void *address) {
 // Unregisters use of the memory pointed to by ptr. If the reference counter is
 // zero at this point the memory can be safely freed, otherwise it must be kept
 // intact. 
-
-// Unregisters use of the memory pointed to by ptr. If the reference counter is
-// zero at this point the memory can be safely freed, otherwise, it must be kept intact. 
 void gc_free(void *address) {
     if (address == NULL) {
         return; // No action needed for NULL pointers
