@@ -11,7 +11,7 @@ struct list {
 	node_t *head;			//Pointer to the head (first node) of the list
 };
 
-//A funciton to create a new node
+//A function to create a new node
 node_t *create_node(void *item, node_t *next) {
     node_t *new_node = malloc(sizeof(node_t));
     if (new_node == NULL) {
@@ -53,7 +53,7 @@ void list_addfirst(list_t *list, void *item){
     list->head = new_node;
 }
 
-//Walks through the list untill we find the node pointing to void and add our new item
+//Walks through the list until we find the node pointing to void and add our new item
 void list_addlast(list_t *list, void *item) {
     node_t *new_node = create_node(item, NULL);
 
@@ -70,7 +70,7 @@ void list_addlast(list_t *list, void *item) {
     }
 }
 
-//Walking through the list untill we find the item that is to be removed, then changing the pointers in the list to point "past" that item
+//Walking through the list until we find the item that is to be removed, then changing the pointers in the list to point "past" that item
 void list_remove(list_t *list, void *item){
 	node_t *previous = NULL;
 	node_t *current = list->head;
