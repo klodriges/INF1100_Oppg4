@@ -3,12 +3,12 @@
 
 //A structure for the nodes in the list
 typedef struct node {
-    void *item;
-    struct node *next;
+    void *item;				//Pointer to the item hosted within the node
+    struct node *next;		//Pointer to the next item in the list
 } node_t;
 
 struct list {
-	node_t *head;
+	node_t *head;			//Pointer to the head (first node) of the list
 };
 
 //A funciton to create a new node
